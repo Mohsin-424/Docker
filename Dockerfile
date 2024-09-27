@@ -1,9 +1,18 @@
-# Use an official Nginx image as a base image
-FROM nginx:alpine
+# Base image
+FROM python:3.9-slim
 
-# Copy the static files (HTML and CSS) to the Nginx HTML directory
-COPY index.html /usr/share/nginx/html/index.html
-COPY style.css /usr/share/nginx/html/style.css
+# Set the working directory
+WORKDIR /app
 
-# Expose port 80
-EXPOSE 80
+# Copy requirements file and install dependencies
+COPY requirements.txt requirements.txt
+RUN pip install -r requirements.txt
+
+# Copy the rest of the application
+COPY . .
+
+# Expose the port that the Flask app runs on
+EXPOSE 5000
+
+# Run the Flask app
+CMD ["python", "app.py"]
